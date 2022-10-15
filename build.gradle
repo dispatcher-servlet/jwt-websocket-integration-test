@@ -1,0 +1,54 @@
+plugins {
+	id 'org.springframework.boot' version '2.7.4'
+	id 'io.spring.dependency-management' version '1.0.14.RELEASE'
+	id 'java'
+}
+
+group = 'com.mtvu'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+repositories {
+	mavenCentral()
+}
+
+ext {
+	set('springCloudVersion', "2021.0.4")
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+  implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+  implementation 'org.springframework.boot:spring-boot-starter-reactor-netty'
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+
+  testImplementation 'org.springframework.boot:spring-boot-starter-test'
+  testImplementation 'com.github.tomakehurst:wiremock-jre8:2.34.0'
+  testImplementation 'org.awaitility:awaitility-kotlin:4.2.0'
+	testImplementation 'io.projectreactor:reactor-test'
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+// copies all the jar dependencies your app needs to the lib folder
+task deps(type: Copy) {
+  from configurations.runtimeClasspath
+  into "$buildDir/lib"
+}
+
+// creates your manifest file within the JAR
+jar {
+  manifest {
+    attributes["Main-Class"] = "com.mtvu.websocketserver.WebsocketServerApplication"
+    attributes["Class-Path"] = configurations.runtimeClasspath.collect { 'lib/' + it.getName() }.join(' ')
+  }
+}

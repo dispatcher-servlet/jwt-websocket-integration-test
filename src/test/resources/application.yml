@@ -1,0 +1,27 @@
+server:
+  port: 8088
+
+spring:
+  application:
+    name: websocket-server
+
+  cloud:
+    discovery:
+      enabled: false
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:8081/.well-known/jwks.json
+
+broker:
+  relay:
+    host: localhost
+    port: 61616
+    user: guest
+    password: guest
+
+auth:
+  jwe-key-value: classpath:simple.priv
+

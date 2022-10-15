@@ -1,0 +1,37 @@
+logging:
+  level:
+    org:
+      springframework:
+        security: TRACE
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
+    healthcheck:
+      enabled: true
+  instance:
+    prefer-ip-address: true
+broker:
+  relay:
+    host: ${BROKER_HOST:localhost}
+server:
+  port: 8080
+
+spring:
+  application:
+    name: websocket-server
+
+  cloud:
+    discovery:
+      enabled: false
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:8081/.well-known/jwks.json
+
+
+auth:
+  jwe-key-value: classpath:simple.priv
